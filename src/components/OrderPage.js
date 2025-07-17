@@ -31,7 +31,7 @@ export default function OrderPage() {
       localStorage.setItem("checkoutEmail", shippingInfo.email);
       localStorage.setItem("shippingInfo", JSON.stringify(shippingInfo));
 
-      const response = await fetch(`${API_BASE}/api/create-checkout-session/`, {
+      const response = await fetch(`${API_BASE}/api/create-checkout-session`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cart, shippingInfo }),
