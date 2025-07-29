@@ -1,24 +1,21 @@
+// src/components/CustomizeForm.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const fonts = [
-  "Arial", "Courier New", "Georgia", "Verdana", "Impact",
-  "Lucida Console", "Comic Sans MS", "Bebas Neue", "Oswald",
-];
-
+const fonts = ["Arial", "Courier New", "Georgia", "Verdana", "Impact", "Lucida Console", "Comic Sans MS", "Bebas Neue", "Oswald"];
 const fontColors = ["white", "red", "blue", "pink"];
 const capColors = ["black", "blue"];
 const bustCost = 4.99;
 const basePrice = 24.99;
 
 export default function CustomizeForm() {
-  const [catName, setCatName] = useState("");
-  const [selectedFont, setSelectedFont] = useState(fonts[0]);
-  const [fontColor, setFontColor] = useState(fontColors[0]);
-  const [capColor, setCapColor] = useState("black");
-  const [teamLogo, setTeamLogo] = useState("sox");
-  const [bustType, setBustType] = useState("none");
-  const [leBubuColor, setLeBubuColor] = useState("white");
+  const [cat_name, setCatName] = useState("");
+  const [font, setFont] = useState(fonts[0]);
+  const [font_color, setFontColor] = useState(fontColors[0]);
+  const [color, setCapColor] = useState("black");
+  const [team, setTeamLogo] = useState("sox");
+  const [bust_type, setBustType] = useState("none");
+  const [bust_color, setBustColor] = useState("white");
   const [cart, setCart] = useState([]);
   const [pinkInterest, setPinkInterest] = useState(null);
   const navigate = useNavigate();
@@ -35,27 +32,24 @@ export default function CustomizeForm() {
   }, [cart]);
 
   useEffect(() => {
-    // auto sync capColor to team
-    setCapColor(teamLogo === "sox" ? "black" : "blue");
-  }, [teamLogo]);
+    setCapColor(team === "sox" ? "black" : "blue");
+  }, [team]);
 
-  const getTotalPrice = () => {
-    return cart.reduce((acc, item) => {
-      const extra = item.bustType !== "none" ? bustCost : 0;
-      return acc + basePrice + extra;
-    }, 0).toFixed(2);
-  };
+  const getTotalPrice = () =>
+    cart.reduce((acc, item) => acc + basePrice + (item.bust_type !== "none" ? bustCost : 0), 0).toFixed(2);
 
   const handleAddToCart = () => {
     const item = {
-      catName,
-      selectedFont,
-      fontColor,
-      capColor,
-      teamLogo,
-      bustType,
-      leBubuColor,
+      cat_name,
+      font,
+      font_color,
+      color,
+      team,
+      bust_type,
+      bust_color,
+      price: (basePrice + (bust_type !== "none" ? bustCost : 0)).toFixed(2),
     };
+
     setCart([...cart, item]);
     setCatName("");
   };
@@ -66,79 +60,60 @@ export default function CustomizeForm() {
     setCart(updated);
   };
 
-  const submitInterest = async (interest) => {
-  localStorage.setItem("pinkInterest", interest.toString());
-  setPinkInterest(interest);
-};
+  const submitInterest = (interest) => {
+    localStorage.setItem("pinkInterest", interest.toString());
+    setPinkInterest(interest);
+  };
 
+  const renderBustLabel = (type) =>
+    type === "bubu" ? "LaBubu" : type === "pope" ? "Leo Bust" : "None";
+
+  const capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", padding: "2rem" }}>
-      <form style={{ flex: 1, minWidth: "300px", marginRight: "2rem" }}>
-        <h2>🎨 Customize Your Cat Cap</h2>
+    <div style={{ display: "flex", flexWrap: "wrap", padding: "2rem", color: "#222", fontFamily: "'Helvetica Neue', sans-serif", justifyContent: "center" }}>
+      <form style={{ flex: 1, minWidth: "300px", marginRight: "2rem", maxWidth: "500px" }}>
+        <h2 style={{ color: "#b30000" }}>🎨 Customize Your Cat Cap</h2>
 
         <label>Cat's Name</label>
         <input
           type="text"
-          value={catName}
+          value={cat_name}
           onChange={(e) => setCatName(e.target.value)}
           className="form-control mb-3"
+          style={{ border: "1px solid #ccc", borderRadius: "5px", padding: "0.5rem" }}
         />
 
         <label>Font Style</label>
-        <select
-          value={selectedFont}
-          onChange={(e) => setSelectedFont(e.target.value)}
-          className="form-select mb-3"
-        >
-          {fonts.map((font) => (
-            <option key={font} value={font}>{font}</option>
-          ))}
+        <select value={font} onChange={(e) => setFont(e.target.value)} className="form-select mb-3">
+          {fonts.map((f) => <option key={f} value={f}>{f}</option>)}
         </select>
 
         <label>Font Color</label>
-        <select
-          value={fontColor}
-          onChange={(e) => setFontColor(e.target.value)}
-          className="form-select mb-3"
-        >
-          {fontColors.map((color) => (
-            <option key={color} value={color}>{color}</option>
-          ))}
+        <select value={font_color} onChange={(e) => setFontColor(e.target.value)} className="form-select mb-3">
+          {fontColors.map((color) => <option key={color} value={color}>{color}</option>)}
         </select>
 
-        <label>Team Logo</label>
-        <select
-          value={teamLogo}
-          onChange={(e) => setTeamLogo(e.target.value)}
-          className="form-select mb-3"
-        >
+        <label>Team</label>
+        <select value={team} onChange={(e) => setTeamLogo(e.target.value)} className="form-select mb-3">
           <option value="sox">White Sox</option>
           <option value="cubs">Cubs</option>
         </select>
 
-        <label>Bust Option</label>
-        <select
-          value={bustType}
-          onChange={(e) => setBustType(e.target.value)}
-          className="form-select mb-3"
-        >
+        <label>Optional Bust:</label>
+        <select value={bust_type} onChange={(e) => setBustType(e.target.value)} className="form-select mb-3">
           <option value="none">None</option>
-          <option value="pope">Pope Leo</option>
-          <option value="bubu">Le Bubu</option>
+          <option value="pope">Bless it up Leo style Bust</option>
+          <option value="bubu">LaBubu Bust</option>
         </select>
 
-        {bustType === "bubu" && (
+        {(bust_type === "pope" || bust_type === "bubu") && (
           <div className="mb-3">
-            <label>Le Bubu Color</label>
-            <select
-              value={leBubuColor}
-              onChange={(e) => setLeBubuColor(e.target.value)}
-              className="form-select"
-            >
-              {fontColors.map((color) => (
-                <option key={color} value={color}>{color}</option>
-              ))}
+            <label>
+              {bust_type === "pope" ? "Pope Bust Color (white recommended)" : "LaBubu Color"}
+            </label>
+            <select value={bust_color} onChange={(e) => setBustColor(e.target.value)} className="form-select">
+              {fontColors.map((color) => <option key={color} value={color}>{color}</option>)}
             </select>
           </div>
         )}
@@ -146,89 +121,48 @@ export default function CustomizeForm() {
         <button
           type="button"
           onClick={handleAddToCart}
-          className="btn btn-dark w-100 mt-3"
+          className="btn w-100 mt-3"
+          style={{ backgroundColor: "#b30000", color: "#fff", fontWeight: "bold", borderRadius: "6px", padding: "0.6rem", border: "none" }}
         >
           ➕ Add to Cart
         </button>
       </form>
 
-      <div style={{ flex: 1, minWidth: "300px" }}>
-        <h3>🔍 Preview</h3>
-        <div
-          style={{
-            border: "1px solid #ccc",
-            padding: "1rem",
-            borderRadius: "8px",
-            backgroundColor: "#f9f9f9",
-          }}
-        >
-          <p
-            style={{
-              fontFamily: selectedFont,
-              color: fontColor,
-              fontSize: "2.4rem",
-              backgroundColor: "#222",
-              padding: "0.4rem 1rem",
-              borderRadius: "8px",
-              color: fontColor,
-            }}
-          >
-            {catName || "Your Cat's Name"}
+      <div style={{ flex: 1, minWidth: "300px", maxWidth: "500px" }}>
+        <h3 style={{ color: "#b30000" }}>🔍 Preview</h3>
+        <div style={{ border: "1px solid #ccc", padding: "1rem", borderRadius: "8px", backgroundColor: "#fff7f7" }}>
+          <p style={{ fontFamily: font, color: font_color, fontSize: "2.4rem", backgroundColor: "#222", padding: "0.4rem 1rem", borderRadius: "8px" }}>
+            {cat_name || "Your Cat's Name"}
           </p>
-          <p><strong>Cap Color:</strong> {capColor}</p>
-          <p><strong>Team:</strong> {teamLogo === "sox" ? "White Sox" : "Cubs"}</p>
-          <p><strong>Bust:</strong> {bustType}</p>
-          {bustType === "bubu" && <p><strong>Bubu Color:</strong> {leBubuColor}</p>}
+          <p><strong>Cap Color:</strong> {capitalize(color)}</p>
+          <p><strong>Team:</strong> {team === "sox" ? "White Sox" : "Cubs"}</p>
+          <p><strong>Bust:</strong> {renderBustLabel(bust_type)}</p>
+          {(bust_type !== "none") && (
+            <p><strong>{renderBustLabel(bust_type)} Color:</strong> {capitalize(bust_color)}</p>
+          )}
         </div>
 
         <h4 className="mt-4">🛒 Cart ({cart.length} items)</h4>
         <ul>
           {cart.map((item, i) => (
             <li key={i}>
-              {item.catName} — {item.teamLogo} {item.bustType !== "none" ? "+Bust" : ""}{" "}
+              {item.cat_name} — {item.team} {item.bust_type !== "none" ? `+${renderBustLabel(item.bust_type)}` : ""}
               <button onClick={() => handleDelete(i)} style={{ marginLeft: "1rem", color: "red", background: "none", border: "none", cursor: "pointer" }}>✖</button>
             </li>
           ))}
         </ul>
 
         <p className="mt-3"><strong>Total:</strong> ${getTotalPrice()}</p>
-
-        <button
-          className="btn btn-success mt-2"
-          onClick={() => navigate("/order")}
-        >
+        <button className="btn btn-dark mt-2" style={{ backgroundColor: "#b30000", color: "#fff", fontWeight: "bold", border: "none" }} onClick={() => navigate("/order")}>
           🧾 Proceed to Checkout
         </button>
 
-        {/* Pink Survey */}
         {!pinkInterest && (
-          <div
-            style={{
-              padding: "1rem",
-              border: "2px dashed #ffb6c1",
-              borderRadius: "10px",
-              marginTop: "2rem",
-              backgroundColor: "#fff0f6",
-            }}
-          >
-            <h4 style={{ marginBottom: "0.5rem" }}>
-              🎀 Limited Pink Edition Coming Soon!
-            </h4>
-            <p style={{ marginBottom: "1rem" }}>
-              Would you be interested in a full pink cap version for your cat?
-            </p>
-            <button style={buttonStyle} onClick={() => submitInterest(true)}>
-              Yes, I’d love that!
-            </button>
-            <button
-              style={{
-                ...buttonStyle,
-                backgroundColor: "#eee",
-                color: "#333",
-                marginLeft: "1rem",
-              }}
-              onClick={() => submitInterest(false)}
-            >
+          <div style={{ padding: "1rem", border: "2px dashed #ffb6c1", borderRadius: "10px", marginTop: "2rem", backgroundColor: "#fff0f6" }}>
+            <h4 style={{ marginBottom: "0.5rem" }}>🎀 Limited Pink Edition Coming Soon!</h4>
+            <p style={{ marginBottom: "1rem" }}>Would you be interested in a full pink cap version for your cat?</p>
+            <button style={buttonStyle} onClick={() => submitInterest(true)}>Yes, I’d love that!</button>
+            <button style={{ ...buttonStyle, backgroundColor: "#eee", color: "#333", marginLeft: "1rem" }} onClick={() => submitInterest(false)}>
               Not interested
             </button>
           </div>

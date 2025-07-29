@@ -1,14 +1,27 @@
-// src/components/LandingPage.js
 import React from "react";
 import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   const styles = {
+    videoBg: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      zIndex: -1,
+    },
+    overlay: {
+      padding: "3rem",
+      borderRadius: "12px",
+      background: "rgba(0, 0, 0, 0.5)",
+      maxWidth: "700px",
+      margin: "2rem",
+      boxShadow: "0 4px 25px rgba(0,0,0,0.4)",
+      backdropFilter: "blur(4px)",
+    },
     page: {
-      backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("/zoe-gayah-jonker-13ky5Ycf0ts-unsplash.jpg")`, // Replace with your filename
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
       minHeight: "100vh",
       display: "flex",
       justifyContent: "center",
@@ -16,13 +29,8 @@ export default function LandingPage() {
       textAlign: "center",
       color: "#fff",
       fontFamily: "'Helvetica Neue', sans-serif",
-    },
-    overlay: {
-      padding: "3rem",
-      borderRadius: "12px",
-      backgroundColor: "rgba(0, 0, 0, 0.4)",
-      maxWidth: "700px",
-      margin: "2rem",
+      position: "relative",
+      overflow: "hidden",
     },
     title: {
       fontSize: "3rem",
@@ -33,51 +41,55 @@ export default function LandingPage() {
       fontSize: "1.25rem",
       marginBottom: "2rem",
     },
-    buttonGroup: {
-      display: "flex",
-      justifyContent: "center",
-      gap: "1rem",
-      flexWrap: "wrap",
-    },
-    buttonPrimary: {
+    button: {
       padding: "0.75rem 1.5rem",
       fontSize: "1rem",
       fontWeight: "bold",
       borderRadius: "8px",
-      backgroundColor: "#fff",
-      color: "#000",
-      textDecoration: "none",
-      border: "none",
-    },
-    buttonSecondary: {
-      padding: "0.75rem 1.5rem",
-      fontSize: "1rem",
-      fontWeight: "bold",
-      borderRadius: "8px",
-      backgroundColor: "transparent",
+      backgroundColor: "#b30000",
       color: "#fff",
       textDecoration: "none",
-      border: "2px solid #fff",
+      border: "none",
+      transition: "background-color 0.3s, transform 0.2s",
+    },
+    logo: {
+      height: "100px",
+      marginBottom: "1rem",
+      marginRight: "-15px",
+      borderRadius: "8px",
     },
   };
 
   return (
     <div style={styles.page}>
+      {/* 🎥 Background video */}
+      <video autoPlay muted loop playsInline style={styles.videoBg}>
+        <source src="/IMG_9493.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
       <div style={styles.overlay}>
-        <h1 style={styles.title}>🐾 Welcome to Catcap Lab</h1>
+        <img src="/main-logo.png" alt="Catcap Lab Logo" style={styles.logo} />
+        <h1 style={styles.title}>Welcome to 3D Catcap Lab</h1>
         <p style={styles.subtitle}>
-          Personalize the <strong>purr-fect</strong> 3D-printed cap for your cat.
-          <br />
+          Custom cat caps, crafted in-house.
+          Designed by real humans. Manufactured with precision 3D printing.
           Choose team colors, styles, and order with ease.
         </p>
-        <div style={styles.buttonGroup}>
-          <Link to="/customize" style={styles.buttonPrimary}>
-            Start Customizing
-          </Link>
-          <Link to="/order" style={styles.buttonSecondary}>
-            Place an Order
-          </Link>
-        </div>
+        <Link
+          to="/customize"
+          style={styles.button}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = "#990000";
+            e.target.style.transform = "scale(1.05)";
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "#b30000";
+            e.target.style.transform = "scale(1)";
+          }}
+        >
+          Start Customizing
+        </Link>
       </div>
     </div>
   );
