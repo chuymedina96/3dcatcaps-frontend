@@ -1,3 +1,4 @@
+// src/pages/SuccessPage.js
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -29,14 +30,14 @@ export default function SuccessPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           cart: cart.map((item) => ({
-            cat_name: item.catName,
-            team: item.teamLogo,
-            color: item.capColor,
-            bust_type: item.bustType,
-            bust_color: item.bustType === "bubu" ? item.leBubuColor : null,
-            font: item.selectedFont,
-            font_color: item.fontColor,
-            price: (24.99 + (item.bustType !== "none" ? 4.99 : 0)).toFixed(2),
+            cat_name: item.cat_name,
+            team: item.team,
+            color: item.color,
+            bust_type: item.bust_type,
+            bust_color: item.bust_type !== "none" ? item.bust_color : null,
+            font: item.font,
+            font_color: item.font_color,
+            price: (24.99 + (item.bust_type !== "none" ? 4.99 : 0)).toFixed(2),
           })),
           shippingInfo: {
             ...shipping,
@@ -51,6 +52,20 @@ export default function SuccessPage() {
           }
           if (data.items?.length > 0) {
             setOrderItems(data.items);
+          } else {
+            // fallback to local cart if backend fails to return items
+            setOrderItems(
+              cart.map((item) => ({
+                cat_name: item.cat_name,
+                team: item.team,
+                color: item.color,
+                bust_type: item.bust_type,
+                bust_color: item.bust_type !== "none" ? item.bust_color : null,
+                font: item.font,
+                font_color: item.font_color,
+                price: (24.99 + (item.bust_type !== "none" ? 4.99 : 0)).toFixed(2),
+              }))
+            );
           }
           if (data.full_name || data.shipping_address) {
             setShippingInfo({
@@ -60,19 +75,6 @@ export default function SuccessPage() {
               city: data.city,
               zip: data.zip,
             });
-          } else {
-            setOrderItems(
-              cart.map((item) => ({
-                cat_name: item.catName,
-                team: item.teamLogo,
-                color: item.capColor,
-                bust_type: item.bustType,
-                bust_color: item.bustType === "bubu" ? item.leBubuColor : null,
-                font: item.selectedFont,
-                font_color: item.fontColor,
-                price: (24.99 + (item.bustType !== "none" ? 4.99 : 0)).toFixed(2),
-              }))
-            );
           }
 
           if (pinkInterest !== null && email) {
@@ -89,6 +91,19 @@ export default function SuccessPage() {
           localStorage.removeItem("shippingInfo");
         })
         .catch(() => {
+          // fallback only if error occurs
+          setOrderItems(
+            cart.map((item) => ({
+              cat_name: item.cat_name,
+              team: item.team,
+              color: item.color,
+              bust_type: item.bust_type,
+              bust_color: item.bust_type !== "none" ? item.bust_color : null,
+              font: item.font,
+              font_color: item.font_color,
+              price: (24.99 + (item.bust_type !== "none" ? 4.99 : 0)).toFixed(2),
+            }))
+          );
           localStorage.removeItem("catcapCart");
           localStorage.removeItem("checkoutEmail");
           localStorage.removeItem("pinkInterest");
