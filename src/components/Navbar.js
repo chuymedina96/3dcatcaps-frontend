@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function NavBar() {
-  const isMobile = window.innerWidth <= 480;
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 480);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const linkHoverStyle = {
     color: "#ffdddd",
     textShadow: "0 0 4px #fff",
+  };
+
+  const linkStyle = {
+    color: "#fff",
+    textDecoration: "none",
+    transition: "all 0.3s ease-in-out",
   };
 
   return (
@@ -14,10 +26,11 @@ export default function NavBar() {
       style={{
         backgroundColor: "#b30000",
         color: "#fff",
-        padding: isMobile ? "0.5rem 1rem" : "0.75rem 2rem",
+        padding: isMobile ? "0.6rem 1rem" : "0.75rem 2rem",
         display: "flex",
+        flexDirection: isMobile ? "column" : "row",
+        alignItems: isMobile ? "flex-start" : "center",
         justifyContent: "space-between",
-        alignItems: "center",
         flexWrap: "wrap",
         boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
       }}
@@ -31,12 +44,14 @@ export default function NavBar() {
           textDecoration: "none",
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.querySelector("span").style.color = linkHoverStyle.color;
-          e.currentTarget.querySelector("span").style.textShadow = linkHoverStyle.textShadow;
+          const span = e.currentTarget.querySelector("span");
+          span.style.color = linkHoverStyle.color;
+          span.style.textShadow = linkHoverStyle.textShadow;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.querySelector("span").style.color = "#fff";
-          e.currentTarget.querySelector("span").style.textShadow = "none";
+          const span = e.currentTarget.querySelector("span");
+          span.style.color = "#fff";
+          span.style.textShadow = "none";
         }}
       >
         <img
@@ -50,9 +65,8 @@ export default function NavBar() {
         />
         <span
           style={{
-            ...linkStyle,
             fontWeight: "bold",
-            fontSize: isMobile ? "1.1rem" : "1.75rem",
+            fontSize: isMobile ? "1.25rem" : "1.75rem",
             transition: "all 0.3s",
           }}
         >
@@ -63,16 +77,19 @@ export default function NavBar() {
       <nav
         style={{
           display: "flex",
-          gap: isMobile ? "1rem" : "1.5rem",
-          fontSize: isMobile ? "1rem" : "1.125rem",
-          marginTop: isMobile ? "0.5rem" : 0,
+          flexDirection: isMobile ? "column" : "row",
+          alignItems: isMobile ? "flex-start" : "center",
+          gap: isMobile ? "0.75rem" : "1.5rem",
+          marginTop: isMobile ? "0.75rem" : 0,
           width: isMobile ? "100%" : "auto",
-          justifyContent: isMobile ? "center" : "flex-end",
         }}
       >
-        {["/customize", "/order"].map((path, i) => (
+        {[
+          { path: "/customize", label: "Customize" },
+          { path: "/order", label: "Order" },
+        ].map(({ path, label }) => (
           <Link
-            key={i}
+            key={path}
             to={path}
             style={linkStyle}
             onMouseEnter={(e) => {
@@ -84,16 +101,10 @@ export default function NavBar() {
               e.target.style.textShadow = "none";
             }}
           >
-            {path === "/customize" ? "Customize" : "Order"}
+            {label}
           </Link>
         ))}
       </nav>
     </header>
   );
 }
-
-const linkStyle = {
-  color: "#fff",
-  textDecoration: "none",
-  transition: "all 0.3s ease-in-out",
-};
