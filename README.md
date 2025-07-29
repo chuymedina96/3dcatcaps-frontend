@@ -1,70 +1,103 @@
-# Getting Started with Create React App
+# 🧢 3D Catcap Lab
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to **3D Catcap Lab** — a playful, design-driven platform where cat lovers can create personalized 3D-printed caps for their feline companions. Users can choose cap colors, fonts, teams, and even add decorative busts to each design. Every cap is designed by real humans and manufactured in-house using state-of-the-art 3D printing technology.
 
-## Available Scripts
+[🌐 Visit the Lab ➝](https://3dcatcaps.com)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🚀 Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend:** React (mobile-optimized)
+- **Backend:** Django + Django REST Framework
+- **Database:** PostgreSQL (SQLite for dev)
+- **Payments:** Stripe Checkout Integration
+- **3D Printing Hardware:**
+  - FlashForge Adventurer 5M Pro
+  - Anycubic Kobra S1 Pro
+- **Deployment:** Heroku or other PaaS
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## ✅ Key Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🧢 Cap Customization
 
-### `npm run build`
+- Choose cap color (Sox black, Cubs blue, etc.)
+- Add your cat’s name with custom font and color
+- Select a favorite Chicago team (Sox or Cubs)
+- **One bust per cap**:
+  - 🦁 *“Bless it up Leo style”*
+  - 👾 *Labubu*
+- Want both busts? Order multiple caps — one bust per cap!
+- Limited edition pink cap option (interest form shown)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 🛒 Cart & Checkout
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Add multiple caps to your cart
+- Cart data persists in `localStorage`
+- Stripe Checkout with live key integration
+- Receipt-style confirmation screen post-purchase
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 🎥 Landing Page
 
-### `npm run eject`
+- Full-screen video background
+- Highlights human-made, tech-driven production
+- CTA to start customizing
+- Responsive on all screen sizes
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 📱 Mobile Optimization
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- iPhone 15 and small screen tested
+- Adaptive layout, font scaling, touch-friendly design
+- Navbar and buttons adjust for mobile users
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 🧠 Interest Tracking
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Pink cap opt-in form
+- Tracks user interest for future special releases
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🛠 Local Development
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Clone the repo and get started:
 
-### Code Splitting
+```bash
+git clone https://github.com/your-username/3d-catcap-lab.git
+cd 3d-catcap-lab
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
+cd frontend
+cp .env.example .env   # Add Stripe public key
+npm install
+npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
+cd ../backend
+python3 -m venv venv
+source venv/bin/activate
+cp .env.example .env   # Add Django secret + Stripe private key
+pip install -r requirements.txt
+python3 manage.py migrate
+python3 manage.py runserver
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+3d-catcap-lab/
+│
+├── frontend/             # React client
+│   ├── components/       # Navbar, forms, success pages
+│   ├── pages/            # LandingPage, CustomizePage, OrderPage
+│   └── assets/           # Logos, video, fonts, icons
+│
+├── backend/              # Django backend
+│   ├── catcaps/          # Main Django app (models, views, routes)
+│   └── settings/         # Stripe config, DB, secret keys
+│
+├── media/                # Static assets used for local dev
+├── .env.example          # Template for local environment setup
+└── README.md
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
