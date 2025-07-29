@@ -31,7 +31,10 @@ export default function OrderPage() {
       const stripe = await stripePromise;
       localStorage.setItem("checkoutEmail", email);
       localStorage.setItem("shippingInfo", JSON.stringify(shippingInfo));
-
+      console.log("Sending to backend:", {
+        cart,
+        shippingInfo
+      });
       const response = await fetch(`${API_BASE}/api/create-checkout-session/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
