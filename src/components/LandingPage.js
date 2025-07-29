@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function LandingPage() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 480);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const styles = {
     videoBg: {
       position: "fixed",
@@ -11,58 +19,61 @@ export default function LandingPage() {
       height: "100%",
       objectFit: "cover",
       zIndex: -1,
-    },
-    overlay: {
-      padding: "3rem",
-      borderRadius: "12px",
-      background: "rgba(0, 0, 0, 0.5)",
-      maxWidth: "700px",
-      margin: "2rem",
-      boxShadow: "0 4px 25px rgba(0,0,0,0.4)",
-      backdropFilter: "blur(4px)",
+      pointerEvents: "none",
     },
     page: {
       minHeight: "100vh",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      textAlign: "center",
-      color: "#fff",
+      padding: isMobile ? "0.5rem" : "1rem",
       fontFamily: "'Helvetica Neue', sans-serif",
-      position: "relative",
+      color: "#fff",
       overflow: "hidden",
+      position: "relative",
+      textAlign: "center",
+    },
+    overlay: {
+      background: "rgba(0, 0, 0, 0.5)",
+      borderRadius: "12px",
+      backdropFilter: "blur(4px)",
+      padding: isMobile ? "1.25rem" : "3rem",
+      maxWidth: isMobile ? "90vw" : "700px",
+      width: "100%",
+      boxShadow: "0 4px 25px rgba(0,0,0,0.4)",
+      marginTop: isMobile ? "4rem" : 0,
+    },
+    logo: {
+      height: isMobile ? "60px" : "100px",
+      marginBottom: isMobile ? "0.75rem" : "1rem",
+      borderRadius: "8px",
     },
     title: {
-      fontSize: "3rem",
+      fontSize: isMobile ? "1.6rem" : "3rem",
       fontWeight: "bold",
-      marginBottom: "1rem",
+      marginBottom: isMobile ? "0.5rem" : "1rem",
     },
     subtitle: {
-      fontSize: "1.25rem",
-      marginBottom: "2rem",
+      fontSize: isMobile ? "0.9rem" : "1.25rem",
+      marginBottom: isMobile ? "1.25rem" : "2rem",
+      lineHeight: isMobile ? "1.35rem" : "1.75rem",
     },
     button: {
-      padding: "0.75rem 1.5rem",
-      fontSize: "1rem",
+      padding: isMobile ? "0.6rem 1.2rem" : "0.75rem 1.5rem",
+      fontSize: isMobile ? "0.95rem" : "1rem",
       fontWeight: "bold",
       borderRadius: "8px",
       backgroundColor: "#b30000",
       color: "#fff",
       textDecoration: "none",
       border: "none",
+      display: "inline-block",
       transition: "background-color 0.3s, transform 0.2s",
-    },
-    logo: {
-      height: "100px",
-      marginBottom: "1rem",
-      marginRight: "-15px",
-      borderRadius: "8px",
     },
   };
 
   return (
     <div style={styles.page}>
-      {/* 🎥 Background video */}
       <video autoPlay muted loop playsInline style={styles.videoBg}>
         <source src="/IMG_9493.mp4" type="video/mp4" />
         Your browser does not support the video tag.
@@ -72,9 +83,9 @@ export default function LandingPage() {
         <img src="/main-logo.png" alt="Catcap Lab Logo" style={styles.logo} />
         <h1 style={styles.title}>Welcome to 3D Catcap Lab</h1>
         <p style={styles.subtitle}>
-          Custom cat caps, crafted in-house.
-          Designed by real humans. Manufactured with precision 3D printing.
-          Choose team colors, styles, and order with ease.
+          Custom cat caps, crafted in-house. <br />
+          Designed by real humans. <br />
+          Made with state-of-the-art 3D printing.
         </p>
         <Link
           to="/customize"
