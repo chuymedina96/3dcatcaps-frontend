@@ -51,7 +51,7 @@ export default function SuccessPage() {
           }
           if (data.items?.length > 0) {
             setOrderItems(data.items);
-          } 
+          }
           if (data.full_name || data.shipping_address) {
             setShippingInfo({
               fullName: data.full_name,
@@ -102,67 +102,71 @@ export default function SuccessPage() {
   };
 
   return (
-    <div className="container py-5">
-      <div className="text-center mb-5">
-        <h2 className="mb-3">🎉 Payment Successful!</h2>
-        <p>Your Cat Cap order has been received and is now in production.</p>
-        {confirmationCode && (
-          <h4 className="mt-4">
-            Confirmation Code:{" "}
-            <span className="text-success">{confirmationCode}</span>
-          </h4>
-        )}
-      </div>
-
-      {shippingInfo.fullName && (
-        <div className="mb-4">
-          <h5>📦 Shipping Information</h5>
-          <p><strong>Name:</strong> {shippingInfo.fullName}</p>
-          <p><strong>Email:</strong> {shippingInfo.email}</p>
-          <p>
-            <strong>Address:</strong> {shippingInfo.address}, {shippingInfo.city},{" "}
-            {shippingInfo.zip}
-          </p>
+    <div className="container py-5" style={{ maxWidth: "700px", fontFamily: "'Courier New', monospace" }}>
+      <div className="border p-4 shadow-sm rounded" style={{ background: "#fff" }}>
+        <div className="text-center mb-4">
+          <h2 className="mb-2">🧾 CatCap Receipt</h2>
+          <p className="text-muted mb-0">Thanks for your order!</p>
+          {confirmationCode && (
+            <p className="mt-2">
+              <strong>Confirmation:</strong>{" "}
+              <span className="text-success">{confirmationCode}</span>
+            </p>
+          )}
         </div>
-      )}
 
-      <div>
-        <h5>🧢 Order Summary</h5>
-        <ul className="list-group">
+        <hr />
+
+        {shippingInfo.fullName && (
+          <div className="mb-4">
+            <h5>📦 Shipping To</h5>
+            <p><strong>{shippingInfo.fullName}</strong></p>
+            <p>{shippingInfo.address}, {shippingInfo.city}, {shippingInfo.zip}</p>
+            <p>{shippingInfo.email}</p>
+          </div>
+        )}
+
+        <hr />
+
+        <div className="mb-4">
+          <h5>🧢 Order Details</h5>
           {orderItems.map((item, index) => (
-            <li key={index} className="list-group-item">
-              <strong>{item.cat_name || item.catName}</strong> –{" "}
-              {item.team} cap ({item.color})<br />
-              Font:{" "}
-              <span style={{ color: item.font_color }}>{item.font}</span>
+            <div key={index} className="border-bottom py-2">
+              <div>
+                <strong>{item.cat_name}</strong> – {item.team} cap ({item.color})
+              </div>
+              <div>
+                Font: <span style={{ color: item.font_color }}>{item.font}</span>
+              </div>
               {item.bust_type !== "none" && (
-                <>
-                  {" "}+ {item.bust_type} bust
-                  {item.bust_color && ` (${item.bust_color})`}
-                </>
+                <div>
+                  Bust: {item.bust_type}
+                  {item.bust_color && (
+                    <span> ({item.bust_color})</span>
+                  )}
+                </div>
               )}
-              <span className="float-end">${item.price}</span>
-            </li>
+              <div className="text-end">
+                <strong>${item.price}</strong>
+              </div>
+            </div>
           ))}
-        </ul>
-      </div>
+        </div>
 
-      <div className="mt-5">
-        <h6 className="text-center text-muted">
-          We'll be reaching out to <strong>{shippingInfo.email}</strong> with updates and tracking info as soon as your CatCap ships.
-        </h6>
-      </div>
+        <hr />
 
-      <div className="text-center mt-4">
-        <button
-          onClick={downloadReceipt}
-          className="btn btn-outline-secondary me-3"
-        >
-          📄 Download Receipt
-        </button>
-        <button onClick={() => navigate("/")} className="btn btn-dark">
-          Back to Home
-        </button>
+        <div className="text-center mb-3 text-muted" style={{ fontSize: "0.9rem" }}>
+          We'll contact you at <strong>{shippingInfo.email}</strong> with shipping updates.
+        </div>
+
+        <div className="text-center">
+          <button onClick={downloadReceipt} className="btn btn-outline-secondary me-3">
+            🖨️ Print Receipt
+          </button>
+          <button onClick={() => navigate("/")} className="btn btn-dark">
+            ⬅️ Back Home
+          </button>
+        </div>
       </div>
     </div>
   );
