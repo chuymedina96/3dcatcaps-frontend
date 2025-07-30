@@ -2,7 +2,7 @@
 
 Welcome to **3D Catcap Lab** — a playful, design-driven platform where cat lovers can create personalized 3D-printed caps for their feline companions. Users can choose cap colors, fonts, teams, and even add decorative busts to each design. Every cap is designed by real humans and manufactured in-house using state-of-the-art 3D printing technology.
 
-[🌐 Visit the Lab ➝](https://3dcatcaps.com)
+[🌐 Visit the Lab ➝](3dcatcaps.com)
 
 ---
 
